@@ -69,6 +69,20 @@ async function run() {
       res.send(result);
     })
 
+    // reviews api
+    app.get('/reviews', async (req, res) => {
+
+      let query = {};
+      if (req.query.uid) {
+        query = {
+          uid: req.query.uid
+        }
+      }
+      const cursor = reviewCollection.find(query).sort({ "_id": -1 });
+      const reviews = await cursor.toArray();
+      res.send(reviews);
+    });
+
     app.post('/reviews', verifyJWT, async (req, res) => {
       const review = req.body;
       const result = await reviewCollection.insertOne(review);
