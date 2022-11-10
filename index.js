@@ -35,6 +35,7 @@ async function run() {
   try {
     const serviceCollection = client.db('justiceLawyer').collection('services');
     const reviewCollection = client.db('justiceLawyer').collection('reviews');
+    const blogCollection = client.db('justiceLawyer').collection('blogs');
 
     app.post('/jwt', (req, res) => {
       const user = req.body;
@@ -51,7 +52,6 @@ async function run() {
       res.send(services);
     });
 
-    // services api
     app.get('/services-limit', async (req, res) => {
 
       let query = {};
@@ -136,6 +136,29 @@ async function run() {
       const result = await reviewCollection.deleteOne(query);
       res.send(result);
     })
+
+    // blogs api
+    app.get('/blogs', async (req, res) => {
+      let query = {};
+      const cursor = blogCollection.find(query).sort({ "_id": -1 });
+      const blogs = await cursor.toArray();
+      res.send(blogs);
+    });
+
+    app.get('/blogs-limit', async (req, res) => {
+
+      let query = {};
+      const cursor = blogCollection.find(query).sort({ "_id": -1 }).limit(3);
+      const blogs = await cursor.toArray();
+      res.send(blogs);
+    });
+
+    app.get('/blogs/:slug', async (req, res) => {
+      const slug = req.params.slug;
+      const query = { slug: slug };
+      const service = await blogCollection.findOne(query);
+      res.send(service);
+    });
   }
   finally {
 
@@ -146,18 +169,6 @@ run().catch(err => console.error(err));
 
 app.get('/', (req, res) => {
   res.send('justice lawyer server is running')
-})
-
-
-const blogs = require('./data/blogs.json')
-app.get('/blog', (req, res) => {
-  res.send(blogs)
-})
-
-app.get('/blog/:slug', (req, res) => {
-  const slug = req.params.slug;
-  const blog = blogs.find(item => item.slug === slug)
-  res.send(blog)
 })
 
 app.listen(port, () => {
