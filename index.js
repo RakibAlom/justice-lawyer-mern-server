@@ -87,30 +87,13 @@ async function run() {
     });
 
     // reviews api
-    app.get('/user-reviews', verifyJWT, async (req, res) => {
-      const decoded = req.decoded;
-
-      if (decoded.uid !== req.query.uid) {
-        res.status(403).send({ message: 'unauthorized access' })
-      }
-      let query = {};
-      if (req.query.uid) {
-        query = {
-          uid: req.query.uid
-        }
-      }
-      const cursor = reviewCollection.find(query).sort({ "_id": -1 });
-      const reviews = await cursor.toArray();
-      res.send(reviews);
-    });
-
     app.post('/reviews', verifyJWT, async (req, res) => {
       const review = req.body;
       const result = await reviewCollection.insertOne(review);
       res.send(result);
     })
 
-    app.get('/reviews/:id', verifyJWT, async (req, res) => {
+    app.get('/reviews/:id', async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
       const review = await reviewCollection.findOne(query);

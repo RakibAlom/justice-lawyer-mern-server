@@ -4,12 +4,12 @@ Justice Laywer provides clients with comprehensive legal representation from tri
 ## Services API
 **Services API URL:** https://justice-lawyer-server.vercel.app/services
 
-**Single Course URL:** https://justice-lawyer-server.vercel.app/services/636cc7448695b54496671e0f
+**Single Course URL:** https://justice-lawyer-server.vercel.app/services/636d38ae8e9f40535a10af29
 
 ## Blogs API
-**Blogs API URL:** https://justice-lawyer-server.vercel.app/blogs
+**Blogs API URL:** https://justice-lawyer-server.vercel.app/blog
 
-**Single Blog URL Expamle:** https://justice-lawyer-server.vercel.app/blogs/what-is-node-how-does-node-work
+**Single Blog URL Expamle:** https://justice-lawyer-server.vercel.app/blog/how-does-nodejs-handle-multiple-requests-at-the-same-time
 
 ## Live Website
 **Website URL:** https://justice-lawyer.web.app/
