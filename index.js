@@ -110,7 +110,7 @@ async function run() {
       res.send(result);
     })
 
-    app.get('/reviews/:id', async (req, res) => {
+    app.get('/reviews/:id', verifyJWT, async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
       const review = await reviewCollection.findOne(query);
@@ -136,7 +136,6 @@ async function run() {
       const result = await reviewCollection.deleteOne(query);
       res.send(result);
     })
-
   }
   finally {
 
@@ -147,6 +146,18 @@ run().catch(err => console.error(err));
 
 app.get('/', (req, res) => {
   res.send('justice lawyer server is running')
+})
+
+
+const blogs = require('./data/blogs.json')
+app.get('/blog', (req, res) => {
+  res.send(blogs)
+})
+
+app.get('/blog/:slug', (req, res) => {
+  const slug = req.params.slug;
+  const blog = blogs.find(item => item.slug === slug)
+  res.send(blog)
 })
 
 app.listen(port, () => {
