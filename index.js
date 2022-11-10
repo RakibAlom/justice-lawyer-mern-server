@@ -34,6 +34,7 @@ function verifyJWT(req, res, next) {
 async function run() {
   try {
     const serviceCollection = client.db('justiceLawyer').collection('services');
+    const reviewCollection = client.db('justiceLawyer').collection('reviews');
 
     app.post('/jwt', (req, res) => {
       const user = req.body;
@@ -65,6 +66,12 @@ async function run() {
     app.post('/services', verifyJWT, async (req, res) => {
       const service = req.body;
       const result = await serviceCollection.insertOne(service);
+      res.send(result);
+    })
+
+    app.post('/reviews', verifyJWT, async (req, res) => {
+      const review = req.body;
+      const result = await reviewCollection.insertOne(review);
       res.send(result);
     })
   }
