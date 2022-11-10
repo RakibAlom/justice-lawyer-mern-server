@@ -46,12 +46,16 @@ async function run() {
     app.get('/services', async (req, res) => {
 
       let query = {};
-      if (req.query.email) {
-        query = {
-          email: req.query.email
-        }
-      }
-      const cursor = serviceCollection.find(query);
+      const cursor = serviceCollection.find(query).sort({ "_id": -1 });
+      const services = await cursor.toArray();
+      res.send(services);
+    });
+
+    // services api
+    app.get('/services-limit', async (req, res) => {
+
+      let query = {};
+      const cursor = serviceCollection.find(query).sort({ "_id": -1 }).limit(3);
       const services = await cursor.toArray();
       res.send(services);
     });
@@ -71,7 +75,24 @@ async function run() {
 
     // reviews api
     app.get('/reviews', async (req, res) => {
+      let query = {};
+      if (req.query.uid) {
+        query = {
+          uid: req.query.uid
+        }
+      }
+      const cursor = reviewCollection.find(query).sort({ "_id": -1 });
+      const reviews = await cursor.toArray();
+      res.send(reviews);
+    });
 
+    // reviews api
+    app.get('/user-reviews', verifyJWT, async (req, res) => {
+      const decoded = req.decoded;
+
+      if (decoded.uid !== req.query.uid) {
+        res.status(403).send({ message: 'unauthorized access' })
+      }
       let query = {};
       if (req.query.uid) {
         query = {
@@ -86,6 +107,13 @@ async function run() {
     app.post('/reviews', verifyJWT, async (req, res) => {
       const review = req.body;
       const result = await reviewCollection.insertOne(review);
+      res.send(result);
+    })
+
+    app.delete('/reviews/:id', verifyJWT, async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await reviewCollection.deleteOne(query);
       res.send(result);
     })
   }
