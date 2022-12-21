@@ -151,9 +151,9 @@ run().catch(err => console.error(err));
 
 
 app.get('/', (req, res) => {
-  res.send('justice lawyer server is running')
+  res.send('Justice lawyer server is running')
 })
 
 app.listen(port, () => {
-  console.log(`justice lawyer server running on ${port}`);
+  console.log(`Justice lawyer server running on ${port}`);
 })
